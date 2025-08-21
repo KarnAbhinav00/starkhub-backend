@@ -139,18 +139,38 @@ app.delete("/api/projects/:id", async (req, res) => {
   }
 });
 
-// Team info API
+// server.js (ya app.js jo tumhara backend entry point hai)
+
 app.get("/api/team", (req, res) => {
   res.json([
-    { name: "Abhinav", role: "Team Leader", skills: ["Tech Enthusiastic", "AI Enthusiastic"] },
-    { name: "Abhinav Shukla", role: "Software Specialist", skills: ["Designer Enthusiastic", "AI Enthusiastic"] },
-    { name: "Samyak Katyayan", role: "Hardware Specialist", skills: ["Hardware Enthusiastic"] },
-    { name: "Aditya Kumar", role: "Hardware Specialist", skills: ["Hardware Enthusiastic"] },
-    { name: "Atul Kumar", role: "Learning Dog", skills: ["Unknown"] }
+    { 
+      name: "Abhinav", 
+      role: "Team Leader", 
+      skills: ["Tech Enthusiastic", "AI Enthusiastic"],
+      class: "9",
+      school: "PM SHREE KENDRIYA VIDYALAYA JANAKPURI",
+      contact: "abhii9av.072@gmail.com"
+    },
+    { 
+      name: "Abhinav Shukla", 
+      role: "Software Specialist", 
+      skills: ["Designer Enthusiastic", "AI Enthusiastic"] 
+    },
+    { 
+      name: "Samyak Katyayan", 
+      role: "Hardware Specialist", 
+      skills: ["Hardware Enthusiastic"] 
+    },
+    { 
+      name: "Aditya Kumar", 
+      role: "Hardware Specialist", 
+      skills: ["Hardware Enthusiastic"] 
+    },
+    { 
+      name: "Atul Kumar", 
+      role: "Learning Guy | Researcher", 
+      skills: ["Unknown"] 
+    }
   ]);
 });
-
-// ---------- Start ----------
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 API listening on port ${PORT}`));
 
