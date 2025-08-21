@@ -15,7 +15,6 @@ const allowed = (process.env.ALLOW_ORIGIN || "*")
 app.use(
   cors({
     origin: function (origin, cb) {
-      // allow no-origin (like curl/postman) or any matched origin
       if (!origin || allowed.includes("*") || allowed.includes(origin)) return cb(null, true);
       return cb(new Error("CORS blocked for origin: " + origin));
     },
@@ -40,7 +39,6 @@ mongoose
 
 // ---------- Helpers ----------
 const pickProjectFields = (body) => {
-  // only allow known fields
   const {
     projectDate,
     topic,
@@ -67,7 +65,7 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true, uptime: process.uptime(), time: new Date().toISOString() });
 });
 
-// List projects (optionally support simple query params)
+// List projects
 app.get("/api/projects", async (req, res) => {
   try {
     const { q = "", sort = "createdAt", dir = "desc" } = req.query;
@@ -111,7 +109,7 @@ app.post("/api/projects", async (req, res) => {
   }
 });
 
-// Update project (toggle/edit)
+// Update project
 app.put("/api/projects/:id", async (req, res) => {
   try {
     const data = pickProjectFields(req.body);
@@ -139,8 +137,7 @@ app.delete("/api/projects/:id", async (req, res) => {
   }
 });
 
-// server.js (ya app.js jo tumhara backend entry point hai)
-
+// Team route
 app.get("/api/team", (req, res) => {
   res.json([
     { 
@@ -172,13 +169,10 @@ app.get("/api/team", (req, res) => {
       skills: ["Unknown"] 
     }
   ]);
+});
 
-  const PORT = process.env.PORT || 5000;
+// ---------- Start server ----------
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
-
-});
-
-
-
