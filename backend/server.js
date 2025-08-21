@@ -27,7 +27,7 @@ app.use(express.json({ limit: "1mb" }));
 
 // ---------- MongoDB ----------
 const mongoOpts = {
-  dbName: process.env.DB_NAME || undefined
+  dbName: (process.env.DB_NAME || "StarksDB")
 };
 
 mongoose
@@ -173,4 +173,5 @@ app.get("/api/team", (req, res) => {
     }
   ]);
 });
+
 
