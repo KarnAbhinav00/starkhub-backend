@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
-const ProjectSchema = new mongoose.Schema(
+const projectSchema = new mongoose.Schema(
   {
-    projectDate: { type: Date },          // “Date of the Project”
-    topic: { type: String, required: true, trim: true },
-    description: { type: String, default: "" },
-    madeBy: { type: String, default: "" }, // owner / team
+    projectDate: { type: Date },
+    topic: { type: String, required: true },
+    description: { type: String },
+    madeBy: { type: String },
     startDate: { type: Date },
     completeDate: { type: Date },
     completed: { type: Boolean, default: false }
@@ -13,7 +13,4 @@ const ProjectSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Helpful compound index for sorts & searches
-ProjectSchema.index({ createdAt: -1, topic: 1 });
-
-module.exports = mongoose.model("Project", ProjectSchema);
+module.exports = mongoose.model("Project", projectSchema);
