@@ -18,16 +18,14 @@ app.use(
       if (!origin || allowed.includes("*") || allowed.includes(origin)) return cb(null, true);
       return cb(new Error("CORS blocked for origin: " + origin));
     },
-    credentials: false
+    credentials: true
   })
 );
 
 app.use(express.json({ limit: "1mb" }));
 
 // ---------- MongoDB ----------
-const mongoOpts = {
-  dbName: (process.env.DB_NAME || "StarksDB")
-};
+const mongoOpts = { dbName: process.env.DB_NAME || "StarksDB" };
 
 mongoose
   .connect(process.env.MONGO_URI, mongoOpts)
@@ -39,16 +37,7 @@ mongoose
 
 // ---------- Helpers ----------
 const pickProjectFields = (body) => {
-  const {
-    projectDate,
-    topic,
-    description,
-    madeBy,
-    startDate,
-    completeDate,
-    completed
-  } = body;
-
+  const { projectDate, topic, description, madeBy, startDate, completeDate, completed } = body;
   return {
     ...(projectDate ? { projectDate } : {}),
     ...(topic !== undefined ? { topic } : {}),
@@ -69,7 +58,6 @@ app.get("/api/health", (_req, res) => {
 app.get("/api/projects", async (req, res) => {
   try {
     const { q = "", sort = "createdAt", dir = "desc" } = req.query;
-
     const filter = q
       ? {
           $or: [
@@ -79,11 +67,8 @@ app.get("/api/projects", async (req, res) => {
           ]
         }
       : {};
-
     const sortMap = {};
-    const dirNum = dir === "asc" ? 1 : -1;
-    sortMap[sort] = dirNum;
-
+    sortMap[sort] = dir === "asc" ? 1 : -1;
     const projects = await Project.find(filter).sort(sortMap).lean();
     res.json(projects);
   } catch (err) {
@@ -96,11 +81,9 @@ app.get("/api/projects", async (req, res) => {
 app.post("/api/projects", async (req, res) => {
   try {
     const data = pickProjectFields(req.body);
-
     if (!data.topic || !data.topic.trim()) {
       return res.status(400).json({ error: "Topic is required" });
     }
-
     const project = await Project.create(data);
     res.status(201).json(project);
   } catch (err) {
@@ -148,26 +131,10 @@ app.get("/api/team", (req, res) => {
       school: "PM SHREE KENDRIYA VIDYALAYA JANAKPURI",
       contact: "abhii9av.072@gmail.com"
     },
-    { 
-      name: "Abhinav Shukla", 
-      role: "Software Specialist", 
-      skills: ["Designer Enthusiastic", "AI Enthusiastic"] 
-    },
-    { 
-      name: "Samyak Katyayan", 
-      role: "Hardware Specialist", 
-      skills: ["Hardware Enthusiastic"] 
-    },
-    { 
-      name: "Aditya Kumar", 
-      role: "Hardware Specialist", 
-      skills: ["Hardware Enthusiastic"] 
-    },
-    { 
-      name: "Atul Kumar", 
-      role: "Learning Guy | Researcher", 
-      skills: ["Unknown"] 
-    }
+    { name: "Abhinav Shukla", role: "Software Specialist", skills: ["Designer Enthusiastic", "AI Enthusiastic"] },
+    { name: "Samyak Katyayan", role: "Hardware Specialist", skills: ["Hardware Enthusiastic"] },
+    { name: "Aditya Kumar", role: "Hardware Specialist", skills: ["Hardware Enthusiastic"] },
+    { name: "Atul Kumar", role: "Learning Guy | Researcher", skills: ["Unknown"] }
   ]);
 });
 
